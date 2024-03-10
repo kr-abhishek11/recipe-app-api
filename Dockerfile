@@ -10,6 +10,7 @@ WORKDIR /app
 EXPOSE 8000
 ARG DEV=false
 
+RUN pip install flake8
 RUN python -m venv /py 
 RUN /py/bin/pip install --upgrade pip
 RUN /py/bin/pip install -r /tmp/requirements.txt 
