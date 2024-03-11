@@ -12,12 +12,16 @@ ARG DEV=false
 
 RUN pip install flake8
 RUN python -m venv /py 
-RUN /py/bin/pip install --upgrade pip
+RUN /py/bin/pip install --upgrade pip && \
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        build-base postgresql-dev musl-dev 
 RUN /py/bin/pip install -r /tmp/requirements.txt 
 RUN if [ $DEV = "true"]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt; \
     fi
 RUN rm -rf /tmp && \
+    apk del .tmp-build-deps && \
     adduser \
         --disabled-password \
         --no-create-home \
